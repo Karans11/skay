@@ -1,0 +1,9 @@
+.git
+.github
+.gitignore
+README.md
+.dockerignore
+k8s/
+*.md
+.env*
+node_modules
