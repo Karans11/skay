@@ -14,6 +14,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.build.outputs.image-tag }}
     
     steps:
     - name: Checkout code
@@ -31,16 +33,20 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build and push Docker image
+      id: build
       run: |
         IMAGE_TAG=${{ github.sha }}
-        docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG .
-        docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+        IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+        
+        # Build for AMD64 platform (EKS nodes)
+        docker buildx create --use --name multiarch || true
+        docker buildx build --platform linux/amd64 -t $IMAGE_URI --push .
         
         # Also tag as latest
-        docker tag ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
-        docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+        docker buildx build --platform linux/amd64 -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest --push .
         
-        echo "IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_ENV
+        echo "image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
   deploy:
     needs: build-and-push
@@ -64,17 +70,53 @@ jobs:
 
     - name: Deploy to Kubernetes
       run: |
-        # Update image in deployment
-        sed -i "s|588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest|${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}|g" k8s/deployment.yaml
-        
-        # Apply manifests
+        # Apply namespace first
         kubectl apply -f k8s/namespace.yaml
-        kubectl apply -f k8s/
         
-        # Wait for rollout
-        kubectl rollout status deployment/cybersec-website -n cybersec-website --timeout=300s
+        # Update deployment image to use the new tag
+        sed -i "s|588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest|588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:${{ needs.build-and-push.outputs.image-tag }}|g" k8s/deployment.yaml
         
-        # Show status
+        # Apply all manifests
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
+        kubectl apply -f k8s/ingress.yaml
+        
+        # Wait for rollout with longer timeout (10 minutes)
+        kubectl rollout status deployment/cybersec-website -n cybersec-website --timeout=600s
+        
+        # Show final status
+        echo "=== Deployment Status ==="
         kubectl get pods -n cybersec-website
         kubectl get svc -n cybersec-website
         kubectl get ingress -n cybersec-website
+
+    - name: Verify deployment
+      run: |
+        # Get the number of ready replicas
+        READY_REPLICAS=$(kubectl get deployment cybersec-website -n cybersec-website -o jsonpath='{.status.readyReplicas}')
+        DESIRED_REPLICAS=$(kubectl get deployment cybersec-website -n cybersec-website -o jsonpath='{.spec.replicas}')
+        
+        echo "Ready replicas: $READY_REPLICAS"
+        echo "Desired replicas: $DESIRED_REPLICAS"
+        
+        if [ "$READY_REPLICAS" = "$DESIRED_REPLICAS" ]; then
+          echo "✅ Deployment successful!"
+        else
+          echo "❌ Deployment failed - not all replicas are ready"
+          kubectl describe pods -n cybersec-website
+          exit 1
+        fi
+
+  notify:
+    if: always()
+    needs: [build-and-push, deploy]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        if [ "${{ needs.deploy.result }}" = "success" ]; then
+          echo "🎉 Deployment successful!"
+        else
+          echo "❌ Deployment failed!"
+        fi
