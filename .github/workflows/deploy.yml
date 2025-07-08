@@ -90,26 +90,26 @@ jobs:
       run: |
         aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
     - name: Deploy to Kubernetes
-  run: |
-    # Apply namespace first
-    kubectl apply -f k8s/namespace.yaml
-    
-    # Apply secrets
-    kubectl apply -f k8s/secrets/ || true
-    
-    # Apply the complete admin system (includes everything)
-    kubectl apply -f k8s/admin-system.yaml
-    
-    # Apply fixed ingress
-    kubectl apply -f k8s/ingress-fixed.yaml
-    
-    # Wait for deployments
-    kubectl rollout status deployment/cybersec-website -n cybersec-website --timeout=600s
-    kubectl rollout status deployment/api-service -n cybersec-website --timeout=600s
-    kubectl rollout status deployment/admin-panel -n cybersec-website --timeout=600s
-    
-    # Show status
-    echo "=== Deployment Status ==="
-    kubectl get pods -n cybersec-website
-    kubectl get svc -n cybersec-website
-    kubectl get ingress -n cybersec-website
+      run: |
+        # Apply namespace first
+        kubectl apply -f k8s/namespace.yaml
+        
+        # Apply secrets
+        kubectl apply -f k8s/secrets/ || true
+        
+        # Apply the complete admin system (includes everything)
+        kubectl apply -f k8s/admin-system.yaml
+        
+        # Apply fixed ingress
+        kubectl apply -f k8s/ingress-fixed.yaml
+        
+        # Wait for deployments
+        kubectl rollout status deployment/cybersec-website -n cybersec-website --timeout=600s
+        kubectl rollout status deployment/api-service -n cybersec-website --timeout=600s
+        kubectl rollout status deployment/admin-panel -n cybersec-website --timeout=600s
+        
+        # Show status
+        echo "=== Deployment Status ==="
+        kubectl get pods -n cybersec-website
+        kubectl get svc -n cybersec-website
+        kubectl get ingress -n cybersec-website
