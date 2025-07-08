@@ -12,6 +12,20 @@ spec:
   rules:
   - http:
       paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 3000
+      - path: /admin
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-panel-service
+            port:
+              number: 3001
       - path: /
         pathType: Prefix
         backend:

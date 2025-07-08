@@ -1,0 +1,21 @@
+{
+  "name": "cybersec-api-service",
+  "version": "1.0.0",
+  "description": "API service for cybersecurity website",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "@supabase/supabase-js": "^2.38.4",
+    "joi": "^17.11.0",
+    "express-validator": "^7.0.1",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0"
+  }
+}

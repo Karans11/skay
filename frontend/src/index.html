@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Insights - AI Security & Cybersecurity Publication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .nav-links .admin-link {
+            background: linear-gradient(45deg, #ff6b35, #f9ca24);
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-links .admin-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 0 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .articles-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        .section-title {
+            color: #00ffff;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: #888;
+        }
+
+        .article-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.1);
+            border-color: #00ffff;
+        }
+
+        .article-category {
+            color: #ff00ff;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .article-excerpt {
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .subscription-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        .subscription-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 0.75rem;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+
+        .form-group input::placeholder {
+            color: #888;
+        }
+
+        .subscribe-button {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .subscribe-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
+        }
+
+        .subscribe-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .chatbot-sidebar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .chatbot-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chatbot-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .chatbot-info h3 {
+            color: #00ffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .chatbot-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .chat-container {
+            height: 300px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: linear-gradient(45deg, #0080ff, #00ffff);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.bot {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 0.75rem 1rem;
+            color: white;
+            outline: none;
+        }
+
+        .chat-input::placeholder {
+            color: #888;
+        }
+
+        .send-button {
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+        }
+
+        .categories-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00ffff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">🔒 CyberSec Insights</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#articles">Articles</a></li>
+                <li><a href="#ai-security">AI Security</a></li>
+                <li><a href="#subscribe">Subscribe</a></li>
+                <li><a href="/admin" class="admin-link">Admin Panel</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>AI Security & Cybersecurity Insights</h1>
+            <p>Stay ahead of cyber threats with expert analysis, AI security best practices, and cutting-edge research</p>
+            <button class="cta-button" onclick="scrollToArticles()">Explore Articles</button>
+            <button class="cta-button secondary" onclick="scrollToSubscribe()">Subscribe Now</button>
+        </section>
+
+        <div class="main-content">
+            <section class="articles-section" id="articles">
+                <h2 class="section-title">Latest Articles</h2>
+                
+                <div class="search-container">
+                    <input type="text" class="search-box" id="searchBox" placeholder="Search articles..." onkeyup="searchArticles()">
+                </div>
+                
+                <div class="categories-filter">
+                    <button class="category-btn active" data-category="all" onclick="filterArticles('all')">All</button>
+                    <button class="category-btn" data-category="cybersecurity" onclick="filterArticles('cybersecurity')">Cybersecurity</button>
+                    <button class="category-btn" data-category="ai-security" onclick="filterArticles('ai-security')">AI Security</button>
+                    <button class="category-btn" data-category="best-practices" onclick="filterArticles('best-practices')">Best Practices</button>
+                </div>
+
+                <div class="article-grid" id="articleGrid">
+                    <div class="loading" id="articlesLoading"></div>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <section class="subscription-section" id="subscribe">
+                    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Stay Updated</h3>
+                    <p style="margin-bottom: 1.5rem; color: #cccccc;">Get the latest cybersecurity insights and AI security updates delivered to your inbox.</p>
+                    
+                    <form class="subscription-form" id="subscriptionForm" onsubmit="handleSubscription(event)">
+                        <div class="form-group">
+                            <label for="subscriberName">Name</label>
+                            <input type="text" id="subscriberName" name="name" placeholder="Your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subscriberEmail">Email</label>
+                            <input type="email" id="subscriberEmail" name="email" placeholder="your@email.com" required>
+                        </div>
+                        
+                        <button type="submit" class="subscribe-button" id="subscribeBtn">
+                            <span id="subscribeText">Subscribe Now</span>
+                            <span id="subscribeLoading" class="loading" style="display: none;"></span>
+                        </button>
+                    </form>
+                </section>
+
+                <section class="chatbot-sidebar">
+                    <div class="chatbot-header">
+                        <div class="chatbot-avatar">🤖</div>
+                        <div class="chatbot-info">
+                            <h3>Skay AI Assistant</h3>
+                            <p>Security Expert Bot</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot">
+                                👋 Hi! I'm Skay, your AI security assistant. I can help you with cybersecurity questions, AI security best practices, and threat analysis. How can I assist you today?
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Ask about cybersecurity, AI security, best practices...">
+                            <button class="send-button" onclick="sendMessage()">➤</button>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 CyberSec Insights. Securing the digital frontier with AI-powered expertise.</p>
+        <p>Connected to secure cloud infrastructure with real-time updates.</p>
+    </footer>
+
+    <!-- Notification container -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = '/api';
+        let articles = [];
+        let filteredArticles = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadArticles();
+        });
+
+        // Load articles from API
+        async function loadArticles() {
+            try {
+                showLoading('articlesLoading', true);
+                const response = await fetch(`${API_BASE_URL}/articles`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load articles');
+                }
+                
+                articles = await response.json();
+                filteredArticles = [...articles];
+                renderArticles(filteredArticles);
+                showLoading('articlesLoading', false);
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                showLoading('articlesLoading', false);
+                
+                // Fallback to sample data if API is not available
+                articles = getSampleArticles();
+                filteredArticles = [...articles];
+                renderArticles(filteredArticles);
+            }
+        }
+
+        // Sample articles for fallback
+        function getSampleArticles() {
+            return [
+                {
+                    id: 1,
+                    title: "Zero Trust Architecture: Beyond the Buzzword",
+                    excerpt: "Deep dive into implementing Zero Trust security models in modern enterprise environments. Learn the key principles and practical implementation strategies.",
+                    category: "cybersecurity",
+                    author: "Security Expert",
+                    created_at: "2025-07-05T00:00:00Z",
+                    slug: "zero-trust-architecture-beyond-buzzword"
+                },
+                {
+                    id: 2,
+                    title: "AI Model Security: Protecting Against Adversarial Attacks",
+                    excerpt: "Comprehensive guide to securing AI models against adversarial inputs, data poisoning, and model extraction attacks.",
+                    category: "ai-security",
+                    author: "AI Security Researcher",
+                    created_at: "2025-07-03T00:00:00Z",
+                    slug: "ai-model-security-adversarial-attacks"
+                },
+                {
+                    id: 3,
+                    title: "Incident Response Automation with AI",
+                    excerpt: "How to leverage AI and machine learning to automate incident response workflows and reduce response times.",
+                    category: "best-practices",
+                    author: "Security Operations",
+                    created_at: "2025-07-01T00:00:00Z",
+                    slug: "incident-response-automation-ai"
+                }
+            ];
+        }
+
+        // Render articles
+        function renderArticles(articlesToRender) {
+            const articleGrid = document.getElementById('articleGrid');
+            
+            if (articlesToRender.length === 0) {
+                articleGrid.innerHTML = '<div style="text-align: center; color: #888; padding: 2rem;">No articles found matching your criteria.</div>';
+                return;
+            }
+
+            articleGrid.innerHTML = '';
+
+            articlesToRender.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'article-card';
+                articleCard.innerHTML = `
+                    <div class="article-category">${article.category.replace('-', ' ')}</div>
+                    <h3 class="article-title">${article.title}</h3>
+                    <p class="article-excerpt">${article.excerpt}</p>
+                    <div class="article-meta">
+                        <span>By ${article.author}</span>
+                        <span>${new Date(article.created_at).toLocaleDateString()}</span>
+                    </div>
+                `;
+                articleCard.addEventListener('click', () => openArticle(article.slug));
+                articleGrid.appendChild(articleCard);
+            });
+        }
+
+        // Open article
+        function openArticle(slug) {
+            // In a real implementation, this would navigate to the article page
+            showNotification(`Opening article: ${slug}`, 'success');
+        }
+
+        // Filter articles by category
+        function filterArticles(category) {
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+
+            // Filter articles
+            if (category === 'all') {
+                filteredArticles = [...articles];
+            } else {
+                filteredArticles = articles.filter(article => article.category === category);
+            }
+
+            renderArticles(filteredArticles);
+        }
+
+        // Search articles
+        function searchArticles() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredArticles = [...articles];
+            } else {
+                filteredArticles = articles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) ||
+                    article.excerpt.toLowerCase().includes(searchTerm) ||
+                    article.category.toLowerCase().includes(searchTerm) ||
+                    article.author.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            renderArticles(filteredArticles);
+        }
+
+        // Handle subscription
+        async function handleSubscription(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const subscriptionData = {
+                name: formData.get('name'),
+                email: formData.get('email')
+            };
+
+            try {
+                setSubscriptionLoading(true);
+                
+                const response = await fetch(`${API_BASE_URL}/subscribe`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(subscriptionData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Subscription failed');
+                }
+
+                const result = await response.json();
+                
+                showNotification('Successfully subscribed! Welcome to CyberSec Insights.', 'success');
+                document.getElementById('subscriptionForm').reset();
+                
+            } catch (error) {
+                console.error('Subscription error:', error);
+                showNotification('Subscription failed. Please try again later.', 'error');
+            } finally {
+                setSubscriptionLoading(false);
+            }
+        }
+
+        // Set subscription loading state
+        function setSubscriptionLoading(loading) {
+            const btn = document.getElementById('subscribeBtn');
+            const text = document.getElementById('subscribeText');
+            const loadingSpinner = document.getElementById('subscribeLoading');
+            
+            btn.disabled = loading;
+            text.style.display = loading ? 'none' : 'inline';
+            loadingSpinner.style.display = loading ? 'inline-block' : 'none';
+        }
+
+        // Show/hide loading indicators
+        function showLoading(elementId, show) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Simulate AI response (in real implementation, this would call the API)
+            setTimeout(() => {
+                const response = generateBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function generateBotResponse(userMessage) {
+            const responses = {
+                'subscription': "Great! You can subscribe using the form on the right. You'll get the latest cybersecurity insights and AI security updates delivered to your inbox.",
+                'articles': "Our articles cover cybersecurity, AI security, and best practices. You can filter them by category or use the search function to find specific topics.",
+                'security': "Security is our top priority! We cover everything from Zero Trust architecture to AI model security. What specific security topic interests you?",
+                'ai': "AI security is a rapidly evolving field. We cover adversarial attacks, model security, and AI-powered defense strategies. Check out our AI Security category!",
+                'admin': "The admin panel is accessible through the navigation menu for authorized users. It allows content management and subscriber administration."
+            };
+
+            for (const [keyword, response] of Object.entries(responses)) {
+                if (userMessage.toLowerCase().includes(keyword)) {
+                    return response;
+                }
+            }
+
+            return "I can help you with cybersecurity questions, AI security best practices, subscription information, and navigating our articles. What would you like to know more about?";
+        }
+
+        // Scroll functions
+        function scrollToArticles() {
+            document.getElementById('articles').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToSubscribe() {
+            document.getElementById('subscribe').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Event listeners
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Periodically refresh articles (every 5 minutes)
+        setInterval(loadArticles, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
+

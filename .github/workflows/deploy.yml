@@ -1,122 +1,107 @@
-name: Build and Deploy to Kubernetes
+name: Build and Deploy Multi-Service Application
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REPOSITORY: skay-cybersec-website
   EKS_CLUSTER_NAME: skay-cluster
 
 jobs:
-  build-and-push:
+  detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      image-tag: ${{ steps.build.outputs.image-tag }}
-    
+      frontend: ${{ steps.changes.outputs.frontend }}
+      api: ${{ steps.changes.outputs.api }}
+      admin: ${{ steps.changes.outputs.admin }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          frontend:
+            - 'frontend/**'
+          api:
+            - 'api-service/**'
+          admin:
+            - 'admin-panel/**'
 
+  build-frontend:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-
-    - name: Login to Amazon ECR
+    - name: Login to ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
-
-    - name: Build and push Docker image
-      id: build
+    - name: Build and push frontend
       run: |
-        IMAGE_TAG=${{ github.sha }}
-        IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
-        
-        # Build for AMD64 platform (EKS nodes)
-        docker buildx create --use --name multiarch || true
-        docker buildx build --platform linux/amd64 -t $IMAGE_URI --push .
-        
-        # Also tag as latest
-        docker buildx build --platform linux/amd64 -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest --push .
-        
-        echo "image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
-        echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+        cd frontend
+        docker buildx build --platform linux/amd64 \
+          -t ${{ steps.login-ecr.outputs.registry }}/skay-cybersec-website:${{ github.sha }} \
+          -t ${{ steps.login-ecr.outputs.registry }}/skay-cybersec-website:latest \
+          --push .
 
-  deploy:
-    needs: build-and-push
+  build-api:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.api == 'true' }}
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
+    - uses: actions/checkout@v4
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    - name: Build and push API service
+      run: |
+        cd api-service
+        docker buildx build --platform linux/amd64 \
+          -t ${{ steps.login-ecr.outputs.registry }}/skay-api-service:${{ github.sha }} \
+          -t ${{ steps.login-ecr.outputs.registry }}/skay-api-service:latest \
+          --push .
 
+  deploy:
+    needs: [build-frontend, build-api]
+    if: always() && (needs.build-frontend.result == 'success' || needs.build-frontend.result == 'skipped') && (needs.build-api.result == 'success' || needs.build-api.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
     - name: Update kubeconfig
       run: |
         aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-
     - name: Deploy to Kubernetes
       run: |
-        # Apply namespace first
-        kubectl apply -f k8s/namespace.yaml
-        
-        # Update deployment image to use the new tag
-        sed -i "s|588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest|588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:${{ needs.build-and-push.outputs.image-tag }}|g" k8s/deployment.yaml
+        # Apply secrets first
+        kubectl apply -f k8s/secrets/
         
         # Apply all manifests
-        kubectl apply -f k8s/deployment.yaml
-        kubectl apply -f k8s/service.yaml
-        kubectl apply -f k8s/ingress.yaml
+        kubectl apply -f k8s/
         
-        # Wait for rollout with longer timeout (10 minutes)
+        # Wait for deployments
         kubectl rollout status deployment/cybersec-website -n cybersec-website --timeout=600s
+        kubectl rollout status deployment/api-service -n cybersec-website --timeout=600s
         
-        # Show final status
-        echo "=== Deployment Status ==="
+        # Show status
         kubectl get pods -n cybersec-website
         kubectl get svc -n cybersec-website
         kubectl get ingress -n cybersec-website
-
-    - name: Verify deployment
-      run: |
-        # Get the number of ready replicas
-        READY_REPLICAS=$(kubectl get deployment cybersec-website -n cybersec-website -o jsonpath='{.status.readyReplicas}')
-        DESIRED_REPLICAS=$(kubectl get deployment cybersec-website -n cybersec-website -o jsonpath='{.spec.replicas}')
-        
-        echo "Ready replicas: $READY_REPLICAS"
-        echo "Desired replicas: $DESIRED_REPLICAS"
-        
-        if [ "$READY_REPLICAS" = "$DESIRED_REPLICAS" ]; then
-          echo "✅ Deployment successful!"
-        else
-          echo "❌ Deployment failed - not all replicas are ready"
-          kubectl describe pods -n cybersec-website
-          exit 1
-        fi
-
-  notify:
-    if: always()
-    needs: [build-and-push, deploy]
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Notify deployment status
-      run: |
-        if [ "${{ needs.deploy.result }}" = "success" ]; then
-          echo "🎉 Deployment successful!"
-        else
-          echo "❌ Deployment failed!"
-        fi
