@@ -1,27 +1,38 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
+
+RUN apk update && apk upgrade && apk add --no-cache dumb-init
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install && npm cache clean --force
 
-# Copy source code
-COPY . .
+COPY src/ ./src/
+COPY public/ ./public/
 
-# Build the admin panel
 RUN npm run build
 
-# Create non-root user
-RUN addgroup -g 1001 -S admingroup && \
-    adduser -S adminuser -u 1001 -G admingroup
+FROM nginx:alpine
 
-RUN chown -R adminuser:admingroup /app
-USER adminuser
+RUN apk update && apk upgrade && apk add --no-cache curl
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/build /usr/share/nginx/html
+
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup && \
+    chown -R appuser:appgroup /usr/share/nginx/html && \
+    chown -R appuser:appgroup /var/cache/nginx && \
+    chown -R appuser:appgroup /var/log/nginx && \
+    chown -R appuser:appgroup /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && \
+    chown -R appuser:appgroup /var/run/nginx.pid
+
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3001/ || exit 1
 
 EXPOSE 3001
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3001/health || exit 1
-
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
