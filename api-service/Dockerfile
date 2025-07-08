@@ -1,25 +1,22 @@
 FROM node:18-alpine
 
+RUN apk update && apk upgrade && apk add --no-cache dumb-init
+
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --only=production && npm cache clean --force
 
-# Copy source code
-COPY . .
+COPY src/ ./src/
 
-# Create non-root user
-RUN addgroup -g 1001 -S apigroup && \
-    adduser -S apiuser -u 1001 -G apigroup
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup
 
-# Change ownership
-RUN chown -R apiuser:apigroup /app
-USER apiuser
+USER appuser
 
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000/health || exit 1
 
-CMD ["npm", "start"]
+CMD ["dumb-init", "node", "src/app.js"]
