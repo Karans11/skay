@@ -1,3 +1,169 @@
+# Admin Panel Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-panel
+  namespace: cybersec-website
+  labels:
+    app: admin-panel
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: admin-panel
+  template:
+    metadata:
+      labels:
+        app: admin-panel
+        version: v1
+    spec:
+      containers:
+      - name: admin-panel
+        image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+          name: http
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: SUPABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: supabase-secret
+              key: url
+        - name: SUPABASE_ANON_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supabase-secret
+              key: anon-key
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "150m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
+---
+# Admin Panel Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-panel-service
+  namespace: cybersec-website
+  labels:
+    app: admin-panel
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3001
+    targetPort: 3001
+    protocol: TCP
+    name: http
+  selector:
+    app: admin-panel
+---
+# Redis for session management
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: cybersec-website
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        emptyDir: {}
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: cybersec-website
+  labels:
+    app: redis
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis
+  selector:
+    app: redis
+---
+# Enhanced Ingress with Admin Portal Routing
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -12,6 +178,7 @@ spec:
   rules:
   - http:
       paths:
+      # Admin Portal Routes (highest priority)
       - path: /admin
         pathType: Prefix
         backend:
@@ -19,6 +186,7 @@ spec:
             name: admin-panel-service
             port:
               number: 3001
+      # API Routes (second priority)
       - path: /api
         pathType: Prefix
         backend:
@@ -26,6 +194,7 @@ spec:
             name: api-service
             port:
               number: 3000
+      # Main Website (catch-all, lowest priority)
       - path: /
         pathType: Prefix
         backend:
