@@ -12,6 +12,7 @@ spec:
   rules:
   - http:
       paths:
+      # Admin Portal Routes (highest priority)
       - path: /admin
         pathType: Prefix
         backend:
@@ -19,6 +20,14 @@ spec:
             name: admin-panel-service
             port:
               number: 3001
+      # API Routes (second priority)
+      - path: /api/admin
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 3000
       - path: /api
         pathType: Prefix
         backend:
@@ -26,6 +35,7 @@ spec:
             name: api-service
             port:
               number: 3000
+      # Main Website (catch-all, lowest priority)
       - path: /
         pathType: Prefix
         backend:

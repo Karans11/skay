@@ -1,0 +1,2877 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generateName: admin-panel-567bcf8b6d-
+    labels:
+      app: admin-panel
+      pod-template-hash: 567bcf8b6d
+      version: v1
+    name: admin-panel-567bcf8b6d-g9dtd
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: admin-panel-567bcf8b6d
+      uid: c0cd5085-d5ef-42c9-93fb-320ac78d5596
+    resourceVersion: "82164"
+    uid: b43a29e7-e04d-438d-ba51-bd9e7f5f86f7
+  spec:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: SUPABASE_URL
+        valueFrom:
+          secretKeyRef:
+            key: url
+            name: supabase-secret
+      - name: SUPABASE_ANON_KEY
+        valueFrom:
+          secretKeyRef:
+            key: anon-key
+            name: supabase-secret
+      - name: SUPABASE_SERVICE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: service-key
+            name: supabase-secret
+      - name: JWT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: jwt-secret
+            name: app-secrets
+      - name: ADMIN_SESSION_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: admin-session-secret
+            name: app-secrets
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3001
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: admin-panel
+      ports:
+      - containerPort: 3001
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3001
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 300m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp-volume
+      - mountPath: /var/log/app
+        name: logs-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-vqv6n
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: tmp-volume
+    - emptyDir: {}
+      name: logs-volume
+    - name: kube-api-access-vqv6n
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      message: 'containers with unready status: [admin-panel]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      message: 'containers with unready status: [admin-panel]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+      imageID: ""
+      lastState: {}
+      name: admin-panel
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          message: Back-off pulling image "588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest"
+          reason: ImagePullBackOff
+    hostIP: 192.168.59.170
+    phase: Pending
+    podIP: 192.168.57.18
+    podIPs:
+    - ip: 192.168.57.18
+    qosClass: Burstable
+    startTime: "2025-07-08T14:23:02Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generateName: admin-panel-567bcf8b6d-
+    labels:
+      app: admin-panel
+      pod-template-hash: 567bcf8b6d
+      version: v1
+    name: admin-panel-567bcf8b6d-sq6vq
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: admin-panel-567bcf8b6d
+      uid: c0cd5085-d5ef-42c9-93fb-320ac78d5596
+    resourceVersion: "82248"
+    uid: cb7260c5-a2c0-4609-80f7-9dc526556c55
+  spec:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: SUPABASE_URL
+        valueFrom:
+          secretKeyRef:
+            key: url
+            name: supabase-secret
+      - name: SUPABASE_ANON_KEY
+        valueFrom:
+          secretKeyRef:
+            key: anon-key
+            name: supabase-secret
+      - name: SUPABASE_SERVICE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: service-key
+            name: supabase-secret
+      - name: JWT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: jwt-secret
+            name: app-secrets
+      - name: ADMIN_SESSION_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: admin-session-secret
+            name: app-secrets
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3001
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: admin-panel
+      ports:
+      - containerPort: 3001
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3001
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 300m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp-volume
+      - mountPath: /var/log/app
+        name: logs-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-bvc8r
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: tmp-volume
+    - emptyDir: {}
+      name: logs-volume
+    - name: kube-api-access-bvc8r
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      message: 'containers with unready status: [admin-panel]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      message: 'containers with unready status: [admin-panel]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+      imageID: ""
+      lastState: {}
+      name: admin-panel
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          message: Back-off pulling image "588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest"
+          reason: ImagePullBackOff
+    hostIP: 192.168.59.170
+    phase: Pending
+    podIP: 192.168.38.211
+    podIPs:
+    - ip: 192.168.38.211
+    qosClass: Burstable
+    startTime: "2025-07-08T14:23:02Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/restartedAt: "2025-07-08T20:14:35+05:30"
+    creationTimestamp: "2025-07-08T14:44:35Z"
+    generateName: admin-panel-5d869bb5b9-
+    labels:
+      app: admin-panel
+      pod-template-hash: 5d869bb5b9
+      version: v1
+    name: admin-panel-5d869bb5b9-x98mt
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: admin-panel-5d869bb5b9
+      uid: 03de66ee-866b-46b2-ac14-2b361def9cf7
+    resourceVersion: "82414"
+    uid: 2f087885-d47e-48ff-9a90-637701a452b3
+  spec:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: SUPABASE_URL
+        valueFrom:
+          secretKeyRef:
+            key: url
+            name: supabase-secret
+      - name: SUPABASE_ANON_KEY
+        valueFrom:
+          secretKeyRef:
+            key: anon-key
+            name: supabase-secret
+      - name: SUPABASE_SERVICE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: service-key
+            name: supabase-secret
+      - name: JWT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: jwt-secret
+            name: app-secrets
+      - name: ADMIN_SESSION_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: admin-session-secret
+            name: app-secrets
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3001
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: admin-panel
+      ports:
+      - containerPort: 3001
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3001
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 300m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp-volume
+      - mountPath: /var/log/app
+        name: logs-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xqqvt
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: tmp-volume
+    - emptyDir: {}
+      name: logs-volume
+    - name: kube-api-access-xqqvt
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:44:35Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:44:35Z"
+      message: 'containers with unready status: [admin-panel]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:44:35Z"
+      message: 'containers with unready status: [admin-panel]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:44:35Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+      imageID: ""
+      lastState: {}
+      name: admin-panel
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          message: Back-off pulling image "588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest"
+          reason: ImagePullBackOff
+    hostIP: 192.168.59.170
+    phase: Pending
+    podIP: 192.168.44.254
+    podIPs:
+    - ip: 192.168.44.254
+    qosClass: Burstable
+    startTime: "2025-07-08T14:44:35Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T15:04:35Z"
+    generateName: api-service-56bb5cbbfd-
+    labels:
+      app: api-service
+      pod-template-hash: 56bb5cbbfd
+      version: v1
+    name: api-service-56bb5cbbfd-7g9bv
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: api-service-56bb5cbbfd
+      uid: ddfa89ef-8723-45cb-9e4b-36c8d527e673
+    resourceVersion: "81714"
+    uid: 3ba22fdc-fb40-45fd-9c4e-26c6c8464c7a
+  spec:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: SUPABASE_URL
+        valueFrom:
+          secretKeyRef:
+            key: url
+            name: supabase-secret
+      - name: SUPABASE_ANON_KEY
+        valueFrom:
+          secretKeyRef:
+            key: anon-key
+            name: supabase-secret
+      - name: SUPABASE_SERVICE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: service-key
+            name: supabase-secret
+      - name: JWT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: jwt-secret
+            name: app-secrets
+      - name: REDIS_URL
+        valueFrom:
+          secretKeyRef:
+            key: redis-url
+            name: app-secrets
+      - name: RATE_LIMIT_REDIS
+        value: "true"
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: api
+      ports:
+      - containerPort: 3000
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 400m
+          memory: 512Mi
+        requests:
+          cpu: 150m
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp-volume
+      - mountPath: /var/log/app
+        name: logs-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-tn77l
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: tmp-volume
+    - emptyDir: {}
+      name: logs-volume
+    - name: kube-api-access-tn77l
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T15:04:36Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T16:44:07Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T16:44:07Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T15:04:36Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://e7bc5005c4ca4def43cdcfbe1b67c8198681bad44c66a426f1ce058800392551
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+      imageID: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service@sha256:c7c8a33a8a1591eab392ca6de60750def21bb65b9734fa5a4af490f8b665d372
+      lastState:
+        terminated:
+          containerID: containerd://96e2b636c229ded678b546eea77698d5d7862ba3e93c5bfca82e64de4196b332
+          exitCode: 0
+          finishedAt: "2025-07-08T16:43:57Z"
+          reason: Completed
+          startedAt: "2025-07-08T16:37:47Z"
+      name: api
+      ready: true
+      restartCount: 16
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T16:43:57Z"
+    hostIP: 192.168.59.170
+    phase: Running
+    podIP: 192.168.41.37
+    podIPs:
+    - ip: 192.168.41.37
+    qosClass: Burstable
+    startTime: "2025-07-08T15:04:36Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T15:03:38Z"
+    generateName: api-service-56bb5cbbfd-
+    labels:
+      app: api-service
+      pod-template-hash: 56bb5cbbfd
+      version: v1
+    name: api-service-56bb5cbbfd-jnlv6
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: api-service-56bb5cbbfd
+      uid: ddfa89ef-8723-45cb-9e4b-36c8d527e673
+    resourceVersion: "81882"
+    uid: bdf8bcb1-a5f9-4873-af25-6d4f404de9aa
+  spec:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: SUPABASE_URL
+        valueFrom:
+          secretKeyRef:
+            key: url
+            name: supabase-secret
+      - name: SUPABASE_ANON_KEY
+        valueFrom:
+          secretKeyRef:
+            key: anon-key
+            name: supabase-secret
+      - name: SUPABASE_SERVICE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: service-key
+            name: supabase-secret
+      - name: JWT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: jwt-secret
+            name: app-secrets
+      - name: REDIS_URL
+        valueFrom:
+          secretKeyRef:
+            key: redis-url
+            name: app-secrets
+      - name: RATE_LIMIT_REDIS
+        value: "true"
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: api
+      ports:
+      - containerPort: 3000
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 400m
+          memory: 512Mi
+        requests:
+          cpu: 150m
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp-volume
+      - mountPath: /var/log/app
+        name: logs-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-bjscv
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: tmp-volume
+    - emptyDir: {}
+      name: logs-volume
+    - name: kube-api-access-bjscv
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T15:03:38Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T16:45:03Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T16:45:03Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T15:03:38Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://9be4e36aab7e2dc67b8ab61de54cbd43ab0a6ec5c002d06f4c84ef4c3fd8eeab
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+      imageID: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service@sha256:c7c8a33a8a1591eab392ca6de60750def21bb65b9734fa5a4af490f8b665d372
+      lastState:
+        terminated:
+          containerID: containerd://89124c0835dfc8268fd31a5554ee67a1c34a39b764b299dae3e67baecf94c111
+          exitCode: 0
+          finishedAt: "2025-07-08T16:44:48Z"
+          reason: Completed
+          startedAt: "2025-07-08T16:38:29Z"
+      name: api
+      ready: true
+      restartCount: 16
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T16:44:49Z"
+    hostIP: 192.168.59.170
+    phase: Running
+    podIP: 192.168.39.155
+    podIPs:
+    - ip: 192.168.39.155
+    qosClass: Burstable
+    startTime: "2025-07-08T15:03:38Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T15:03:53Z"
+    generateName: api-service-56bb5cbbfd-
+    labels:
+      app: api-service
+      pod-template-hash: 56bb5cbbfd
+      version: v1
+    name: api-service-56bb5cbbfd-vbdhw
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: api-service-56bb5cbbfd
+      uid: ddfa89ef-8723-45cb-9e4b-36c8d527e673
+    resourceVersion: "82631"
+    uid: 671b22ff-8063-4951-9740-ff07bd8221ea
+  spec:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: SUPABASE_URL
+        valueFrom:
+          secretKeyRef:
+            key: url
+            name: supabase-secret
+      - name: SUPABASE_ANON_KEY
+        valueFrom:
+          secretKeyRef:
+            key: anon-key
+            name: supabase-secret
+      - name: SUPABASE_SERVICE_KEY
+        valueFrom:
+          secretKeyRef:
+            key: service-key
+            name: supabase-secret
+      - name: JWT_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: jwt-secret
+            name: app-secrets
+      - name: REDIS_URL
+        valueFrom:
+          secretKeyRef:
+            key: redis-url
+            name: app-secrets
+      - name: RATE_LIMIT_REDIS
+        value: "true"
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: api
+      ports:
+      - containerPort: 3000
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 400m
+          memory: 512Mi
+        requests:
+          cpu: 150m
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp
+        name: tmp-volume
+      - mountPath: /var/log/app
+        name: logs-volume
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-zjsrd
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: tmp-volume
+    - emptyDir: {}
+      name: logs-volume
+    - name: kube-api-access-zjsrd
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T15:03:54Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T16:49:25Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T16:49:25Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T15:03:54Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://f209af04dd76e2ce2f58a8284d7e66fd8ce7e2456a808199a33c87b77f29ff8b
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+      imageID: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service@sha256:c7c8a33a8a1591eab392ca6de60750def21bb65b9734fa5a4af490f8b665d372
+      lastState:
+        terminated:
+          containerID: containerd://d1f211ec61961da1891a05433ebca843f4e148cac66fab60cdb2fae29d8dd3d3
+          exitCode: 0
+          finishedAt: "2025-07-08T16:49:15Z"
+          reason: Completed
+          startedAt: "2025-07-08T16:43:05Z"
+      name: api
+      ready: true
+      restartCount: 17
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T16:49:15Z"
+    hostIP: 192.168.59.170
+    phase: Running
+    podIP: 192.168.63.66
+    podIPs:
+    - ip: 192.168.63.66
+    qosClass: Burstable
+    startTime: "2025-07-08T15:03:54Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T12:09:58Z"
+    generateName: cybersec-website-c9784ff7d-
+    labels:
+      app: cybersec-website
+      pod-template-hash: c9784ff7d
+      version: v1
+    name: cybersec-website-c9784ff7d-6rlv7
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: cybersec-website-c9784ff7d
+      uid: b8f0da8c-dfee-49c0-ab0a-62c2a266641f
+    resourceVersion: "34335"
+    uid: 5609af5a-ef2d-4fd2-a09d-aa0e7b17c56b
+  spec:
+    containers:
+    - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: website
+      ports:
+      - containerPort: 8080
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-f44qc
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-f44qc
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:09:58Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:10:09Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:10:09Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:09:58Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://64f051d75d7e2c3e66f689dbd130cfbb10122146709e55975b8be44b65d07a59
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest
+      imageID: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website@sha256:4e4f65e81826bf9876d29bfe4e6ba4e224bf82e40487ba181dbe3d50fd79c048
+      lastState: {}
+      name: website
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T12:10:00Z"
+    hostIP: 192.168.59.170
+    phase: Running
+    podIP: 192.168.50.135
+    podIPs:
+    - ip: 192.168.50.135
+    qosClass: Burstable
+    startTime: "2025-07-08T12:09:58Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T12:09:58Z"
+    generateName: cybersec-website-c9784ff7d-
+    labels:
+      app: cybersec-website
+      pod-template-hash: c9784ff7d
+      version: v1
+    name: cybersec-website-c9784ff7d-smkd8
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: cybersec-website-c9784ff7d
+      uid: b8f0da8c-dfee-49c0-ab0a-62c2a266641f
+    resourceVersion: "34347"
+    uid: 9d9c1057-e97c-497c-ae67-309e2eec9b4c
+  spec:
+    containers:
+    - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      name: website
+      ports:
+      - containerPort: 8080
+        name: http
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-22ndc
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-22ndc
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:09:58Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:10:09Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:10:09Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T12:09:58Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://19562d891c6d56dcb1be932a6747375209029f3f5ec33acb7dbf6dc03051906e
+      image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest
+      imageID: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website@sha256:4e4f65e81826bf9876d29bfe4e6ba4e224bf82e40487ba181dbe3d50fd79c048
+      lastState: {}
+      name: website
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T12:10:00Z"
+    hostIP: 192.168.59.170
+    phase: Running
+    podIP: 192.168.51.96
+    podIPs:
+    - ip: 192.168.51.96
+    qosClass: Burstable
+    startTime: "2025-07-08T12:09:58Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generateName: redis-74d8dd96c-
+    labels:
+      app: redis
+      pod-template-hash: 74d8dd96c
+    name: redis-74d8dd96c-rwcz9
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: redis-74d8dd96c
+      uid: 2199c172-7778-4dfa-81ed-06a401bec521
+    resourceVersion: "56708"
+    uid: f298cb3f-3a74-4969-bac2-728e0f6053a9
+  spec:
+    containers:
+    - image: redis:7-alpine
+      imagePullPolicy: IfNotPresent
+      name: redis
+      ports:
+      - containerPort: 6379
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 999
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /data
+        name: redis-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-cqsvm
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-192-168-59-170.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - emptyDir: {}
+      name: redis-data
+    - name: kube-api-access-cqsvm
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:09Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:09Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-08T14:23:02Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://5d3185f417f9e864c6fad294c3388efd3eb7b798c727bd658bd01ac496c84777
+      image: docker.io/library/redis:7-alpine
+      imageID: docker.io/library/redis@sha256:0c0142c3cd69bc030ea09fecfa1c1c0c7d0e7d6081be6bb4957804f23d2cf57a
+      lastState: {}
+      name: redis
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-08T14:23:08Z"
+    hostIP: 192.168.59.170
+    phase: Running
+    podIP: 192.168.53.159
+    podIPs:
+    - ip: 192.168.53.159
+    qosClass: Burstable
+    startTime: "2025-07-08T14:23:02Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"admin-panel"},"name":"admin-panel-service","namespace":"cybersec-website"},"spec":{"ports":[{"name":"http","port":3001,"protocol":"TCP","targetPort":3001}],"selector":{"app":"admin-panel"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    labels:
+      app: admin-panel
+    name: admin-panel-service
+    namespace: cybersec-website
+    resourceVersion: "56587"
+    uid: 3b039fee-11bb-44fb-9b9b-09763bc85cdd
+  spec:
+    clusterIP: 10.100.110.116
+    clusterIPs:
+    - 10.100.110.116
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 3001
+      protocol: TCP
+      targetPort: 3001
+    selector:
+      app: admin-panel
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"api-service"},"name":"api-service","namespace":"cybersec-website"},"spec":{"ports":[{"name":"http","port":3000,"protocol":"TCP","targetPort":3000}],"selector":{"app":"api-service"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-07-08T12:41:11Z"
+    labels:
+      app: api-service
+    name: api-service
+    namespace: cybersec-website
+    resourceVersion: "64062"
+    uid: 04766c62-dea4-4a66-b4c0-74b4fd3c31bc
+  spec:
+    clusterIP: 10.100.201.168
+    clusterIPs:
+    - 10.100.201.168
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: api-service
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"cybersec-website"},"name":"cybersec-website-service","namespace":"cybersec-website"},"spec":{"ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":8080}],"selector":{"app":"cybersec-website"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-07-08T09:21:00Z"
+    labels:
+      app: cybersec-website
+    name: cybersec-website-service
+    namespace: cybersec-website
+    resourceVersion: "6120"
+    uid: b0b7b36e-d68a-4ae6-92ac-251c410c2e24
+  spec:
+    clusterIP: 10.100.13.160
+    clusterIPs:
+    - 10.100.13.160
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: cybersec-website
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"redis"},"name":"redis-service","namespace":"cybersec-website"},"spec":{"ports":[{"name":"redis","port":6379,"protocol":"TCP","targetPort":6379}],"selector":{"app":"redis"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    labels:
+      app: redis
+    name: redis-service
+    namespace: cybersec-website
+    resourceVersion: "56646"
+    uid: 1cfdf79f-2adb-457e-9195-036d0569d3a0
+  spec:
+    clusterIP: 10.100.8.224
+    clusterIPs:
+    - 10.100.8.224
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: 6379
+    selector:
+      app: redis
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"admin-panel","version":"v1"},"name":"admin-panel","namespace":"cybersec-website"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"admin-panel"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"admin-panel","version":"v1"}},"spec":{"containers":[{"env":[{"name":"NODE_ENV","value":"production"},{"name":"SUPABASE_URL","valueFrom":{"secretKeyRef":{"key":"url","name":"supabase-secret"}}},{"name":"SUPABASE_ANON_KEY","valueFrom":{"secretKeyRef":{"key":"anon-key","name":"supabase-secret"}}},{"name":"SUPABASE_SERVICE_KEY","valueFrom":{"secretKeyRef":{"key":"service-key","name":"supabase-secret"}}},{"name":"JWT_SECRET","valueFrom":{"secretKeyRef":{"key":"jwt-secret","name":"app-secrets"}}},{"name":"ADMIN_SESSION_SECRET","valueFrom":{"secretKeyRef":{"key":"admin-session-secret","name":"app-secrets"}}}],"image":"588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":3001},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"admin-panel","ports":[{"containerPort":3001,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":3001},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"300m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":1001},"volumeMounts":[{"mountPath":"/tmp","name":"tmp-volume"},{"mountPath":"/var/log/app","name":"logs-volume"}]}],"volumes":[{"emptyDir":{},"name":"tmp-volume"},{"emptyDir":{},"name":"logs-volume"}]}}}}
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generation: 2
+    labels:
+      app: admin-panel
+      version: v1
+    name: admin-panel
+    namespace: cybersec-website
+    resourceVersion: "62477"
+    uid: 283afac2-d9c6-49a0-95f4-97604837aa97
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: admin-panel
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-08T20:14:35+05:30"
+        creationTimestamp: null
+        labels:
+          app: admin-panel
+          version: v1
+      spec:
+        containers:
+        - env:
+          - name: NODE_ENV
+            value: production
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: url
+                name: supabase-secret
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                key: anon-key
+                name: supabase-secret
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: service-key
+                name: supabase-secret
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: jwt-secret
+                name: app-secrets
+          - name: ADMIN_SESSION_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: admin-session-secret
+                name: app-secrets
+          image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: admin-panel
+          ports:
+          - containerPort: 3001
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp-volume
+          - mountPath: /var/log/app
+            name: logs-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp-volume
+        - emptyDir: {}
+          name: logs-volume
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-08T14:23:02Z"
+      lastUpdateTime: "2025-07-08T14:23:02Z"
+      message: Deployment does not have minimum availability.
+      reason: MinimumReplicasUnavailable
+      status: "False"
+      type: Available
+    - lastTransitionTime: "2025-07-08T14:54:36Z"
+      lastUpdateTime: "2025-07-08T14:54:36Z"
+      message: ReplicaSet "admin-panel-5d869bb5b9" has timed out progressing.
+      reason: ProgressDeadlineExceeded
+      status: "False"
+      type: Progressing
+    observedGeneration: 2
+    replicas: 3
+    unavailableReplicas: 3
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"api-service","version":"v1"},"name":"api-service","namespace":"cybersec-website"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"api-service"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"api-service","version":"v1"}},"spec":{"containers":[{"env":[{"name":"NODE_ENV","value":"production"},{"name":"SUPABASE_URL","valueFrom":{"secretKeyRef":{"key":"url","name":"supabase-secret"}}},{"name":"SUPABASE_ANON_KEY","valueFrom":{"secretKeyRef":{"key":"anon-key","name":"supabase-secret"}}},{"name":"SUPABASE_SERVICE_KEY","valueFrom":{"secretKeyRef":{"key":"service-key","name":"supabase-secret"}}},{"name":"JWT_SECRET","valueFrom":{"secretKeyRef":{"key":"jwt-secret","name":"app-secrets"}}},{"name":"REDIS_URL","valueFrom":{"secretKeyRef":{"key":"redis-url","name":"app-secrets"}}},{"name":"RATE_LIMIT_REDIS","value":"true"}],"image":"588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":3000},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"api","ports":[{"containerPort":3000,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":3000},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"400m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":1001},"volumeMounts":[{"mountPath":"/tmp","name":"tmp-volume"},{"mountPath":"/var/log/app","name":"logs-volume"}]}],"volumes":[{"emptyDir":{},"name":"tmp-volume"},{"emptyDir":{},"name":"logs-volume"}]}}}}
+    creationTimestamp: "2025-07-08T12:41:02Z"
+    generation: 4
+    labels:
+      app: api-service
+      version: v1
+    name: api-service
+    namespace: cybersec-website
+    resourceVersion: "82635"
+    uid: 69ab3ac8-746f-455f-8de0-b7ae747e5568
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: api-service
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: api-service
+          version: v1
+      spec:
+        containers:
+        - env:
+          - name: NODE_ENV
+            value: production
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: url
+                name: supabase-secret
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                key: anon-key
+                name: supabase-secret
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: service-key
+                name: supabase-secret
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: jwt-secret
+                name: app-secrets
+          - name: REDIS_URL
+            valueFrom:
+              secretKeyRef:
+                key: redis-url
+                name: app-secrets
+          - name: RATE_LIMIT_REDIS
+            value: "true"
+          image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: api
+          ports:
+          - containerPort: 3000
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 400m
+              memory: 512Mi
+            requests:
+              cpu: 150m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp-volume
+          - mountPath: /var/log/app
+            name: logs-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp-volume
+        - emptyDir: {}
+          name: logs-volume
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-07-08T12:41:02Z"
+      lastUpdateTime: "2025-07-08T15:05:27Z"
+      message: ReplicaSet "api-service-56bb5cbbfd" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-08T16:49:25Z"
+      lastUpdateTime: "2025-07-08T16:49:25Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 4
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"cybersec-website","version":"v1"},"name":"cybersec-website","namespace":"cybersec-website"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"cybersec-website"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":1},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"cybersec-website","version":"v1"}},"spec":{"containers":[{"image":"588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":8080},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"website","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":8080},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"100m","memory":"128Mi"},"requests":{"cpu":"50m","memory":"64Mi"}}}]}}}}
+    creationTimestamp: "2025-07-08T09:20:58Z"
+    generation: 2
+    labels:
+      app: cybersec-website
+      version: v1
+    name: cybersec-website
+    namespace: cybersec-website
+    resourceVersion: "34355"
+    uid: 56b5a649-0f93-4539-993a-3782b42f5a00
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: cybersec-website
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cybersec-website
+          version: v1
+      spec:
+        containers:
+        - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: website
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2025-07-08T09:21:08Z"
+      lastUpdateTime: "2025-07-08T09:21:08Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-08T09:20:58Z"
+      lastUpdateTime: "2025-07-08T12:10:09Z"
+      message: ReplicaSet "cybersec-website-c9784ff7d" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"redis"},"name":"redis","namespace":"cybersec-website"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"redis"}},"template":{"metadata":{"labels":{"app":"redis"}},"spec":{"containers":[{"image":"redis:7-alpine","name":"redis","ports":[{"containerPort":6379}],"resources":{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":999},"volumeMounts":[{"mountPath":"/data","name":"redis-data"}]}],"volumes":[{"emptyDir":{},"name":"redis-data"}]}}}}
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generation: 1
+    labels:
+      app: redis
+    name: redis
+    namespace: cybersec-website
+    resourceVersion: "56712"
+    uid: 7f107b73-d2a8-4c91-a4dd-0e36254e84f4
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: redis
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: redis
+      spec:
+        containers:
+        - image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          name: redis
+          ports:
+          - containerPort: 6379
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 999
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: redis-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: redis-data
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-08T14:23:09Z"
+      lastUpdateTime: "2025-07-08T14:23:09Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-08T14:23:02Z"
+      lastUpdateTime: "2025-07-08T14:23:09Z"
+      message: ReplicaSet "redis-74d8dd96c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generation: 1
+    labels:
+      app: admin-panel
+      pod-template-hash: 567bcf8b6d
+      version: v1
+    name: admin-panel-567bcf8b6d
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: admin-panel
+      uid: 283afac2-d9c6-49a0-95f4-97604837aa97
+    resourceVersion: "56614"
+    uid: c0cd5085-d5ef-42c9-93fb-320ac78d5596
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: admin-panel
+        pod-template-hash: 567bcf8b6d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: admin-panel
+          pod-template-hash: 567bcf8b6d
+          version: v1
+      spec:
+        containers:
+        - env:
+          - name: NODE_ENV
+            value: production
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: url
+                name: supabase-secret
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                key: anon-key
+                name: supabase-secret
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: service-key
+                name: supabase-secret
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: jwt-secret
+                name: app-secrets
+          - name: ADMIN_SESSION_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: admin-session-secret
+                name: app-secrets
+          image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: admin-panel
+          ports:
+          - containerPort: 3001
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp-volume
+          - mountPath: /var/log/app
+            name: logs-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp-volume
+        - emptyDir: {}
+          name: logs-volume
+  status:
+    fullyLabeledReplicas: 2
+    observedGeneration: 1
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2025-07-08T14:44:35Z"
+    generation: 1
+    labels:
+      app: admin-panel
+      pod-template-hash: 5d869bb5b9
+      version: v1
+    name: admin-panel-5d869bb5b9
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: admin-panel
+      uid: 283afac2-d9c6-49a0-95f4-97604837aa97
+    resourceVersion: "60723"
+    uid: 03de66ee-866b-46b2-ac14-2b361def9cf7
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: admin-panel
+        pod-template-hash: 5d869bb5b9
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-07-08T20:14:35+05:30"
+        creationTimestamp: null
+        labels:
+          app: admin-panel
+          pod-template-hash: 5d869bb5b9
+          version: v1
+      spec:
+        containers:
+        - env:
+          - name: NODE_ENV
+            value: production
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: url
+                name: supabase-secret
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                key: anon-key
+                name: supabase-secret
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: service-key
+                name: supabase-secret
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: jwt-secret
+                name: app-secrets
+          - name: ADMIN_SESSION_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: admin-session-secret
+                name: app-secrets
+          image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-admin-panel:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: admin-panel
+          ports:
+          - containerPort: 3001
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3001
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp-volume
+          - mountPath: /var/log/app
+            name: logs-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp-volume
+        - emptyDir: {}
+          name: logs-volume
+  status:
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "4"
+      deployment.kubernetes.io/revision-history: "2"
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generation: 9
+    labels:
+      app: api-service
+      pod-template-hash: 56bb5cbbfd
+      version: v1
+    name: api-service-56bb5cbbfd
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: api-service
+      uid: 69ab3ac8-746f-455f-8de0-b7ae747e5568
+    resourceVersion: "82634"
+    uid: ddfa89ef-8723-45cb-9e4b-36c8d527e673
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: api-service
+        pod-template-hash: 56bb5cbbfd
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: api-service
+          pod-template-hash: 56bb5cbbfd
+          version: v1
+      spec:
+        containers:
+        - env:
+          - name: NODE_ENV
+            value: production
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: url
+                name: supabase-secret
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                key: anon-key
+                name: supabase-secret
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: service-key
+                name: supabase-secret
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: jwt-secret
+                name: app-secrets
+          - name: REDIS_URL
+            valueFrom:
+              secretKeyRef:
+                key: redis-url
+                name: app-secrets
+          - name: RATE_LIMIT_REDIS
+            value: "true"
+          image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: api
+          ports:
+          - containerPort: 3000
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 400m
+              memory: 512Mi
+            requests:
+              cpu: 150m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp
+            name: tmp-volume
+          - mountPath: /var/log/app
+            name: logs-volume
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: tmp-volume
+        - emptyDir: {}
+          name: logs-volume
+  status:
+    availableReplicas: 3
+    fullyLabeledReplicas: 3
+    observedGeneration: 9
+    readyReplicas: 3
+    replicas: 3
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "3"
+      deployment.kubernetes.io/revision-history: "1"
+    creationTimestamp: "2025-07-08T12:41:02Z"
+    generation: 11
+    labels:
+      app: api-service
+      pod-template-hash: 788f548ccf
+    name: api-service-788f548ccf
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: api-service
+      uid: 69ab3ac8-746f-455f-8de0-b7ae747e5568
+    resourceVersion: "64480"
+    uid: 92adfbce-4c24-453c-b000-73b9cac30dea
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: api-service
+        pod-template-hash: 788f548ccf
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: api-service
+          pod-template-hash: 788f548ccf
+      spec:
+        containers:
+        - env:
+          - name: SUPABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: url
+                name: supabase-secret
+          - name: SUPABASE_ANON_KEY
+            valueFrom:
+              secretKeyRef:
+                key: anon-key
+                name: supabase-secret
+          - name: SUPABASE_SERVICE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: service-key
+                name: supabase-secret
+          image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-api-service:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: api
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 11
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-07-08T09:20:58Z"
+    generation: 3
+    labels:
+      app: cybersec-website
+      pod-template-hash: 854c698bbd
+      version: v1
+    name: cybersec-website-854c698bbd
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: cybersec-website
+      uid: 56b5a649-0f93-4539-993a-3782b42f5a00
+    resourceVersion: "34353"
+    uid: c25ec033-2be5-4a83-9716-34cb4927e83a
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: cybersec-website
+        pod-template-hash: 854c698bbd
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cybersec-website
+          pod-template-hash: 854c698bbd
+          version: v1
+      spec:
+        containers:
+        - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:b9b04faa74381d130d72c2852230077a5ffcc465
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: website
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "2"
+      deployment.kubernetes.io/max-replicas: "3"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: "2025-07-08T12:09:58Z"
+    generation: 2
+    labels:
+      app: cybersec-website
+      pod-template-hash: c9784ff7d
+      version: v1
+    name: cybersec-website-c9784ff7d
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: cybersec-website
+      uid: 56b5a649-0f93-4539-993a-3782b42f5a00
+    resourceVersion: "34352"
+    uid: b8f0da8c-dfee-49c0-ab0a-62c2a266641f
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: cybersec-website
+        pod-template-hash: c9784ff7d
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cybersec-website
+          pod-template-hash: c9784ff7d
+          version: v1
+      spec:
+        containers:
+        - image: 588402992108.dkr.ecr.ap-south-1.amazonaws.com/skay-cybersec-website:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: website
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    fullyLabeledReplicas: 2
+    observedGeneration: 2
+    readyReplicas: 2
+    replicas: 2
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-07-08T14:23:02Z"
+    generation: 1
+    labels:
+      app: redis
+      pod-template-hash: 74d8dd96c
+    name: redis-74d8dd96c
+    namespace: cybersec-website
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: redis
+      uid: 7f107b73-d2a8-4c91-a4dd-0e36254e84f4
+    resourceVersion: "56711"
+    uid: 2199c172-7778-4dfa-81ed-06a401bec521
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: redis
+        pod-template-hash: 74d8dd96c
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: redis
+          pod-template-hash: 74d8dd96c
+      spec:
+        containers:
+        - image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          name: redis
+          ports:
+          - containerPort: 6379
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 999
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: redis-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: redis-data
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
